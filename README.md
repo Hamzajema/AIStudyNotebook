@@ -182,6 +182,3 @@ License
 Contact
 - Project owner / maintainer: update with name or email in repository metadata.
 
-Other resources
-- CRA docs for advanced configuration, PWA support and troubleshooting:
-  - https://facebook.github.io/create-react-app/docs/
