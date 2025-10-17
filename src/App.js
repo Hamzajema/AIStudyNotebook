@@ -7,7 +7,7 @@ import { FaCalculator,FaNetworkWired, FaExpand, FaCompress, FaBrain, FaChevronDo
 
 
 // API Base URL - adjust this to match your backend URL
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://backend-ai-study-notebook.vercel.app/api';
 
 // API Service functions
 const apiService = {
