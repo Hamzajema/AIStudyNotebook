@@ -504,9 +504,7 @@ const [pomodoroSession, setPomodoroSession] = useState(null);
   const handleUpdateSubject = async (id, subjectData) => {
     try {
       const updatedSubject = await apiService.updateSubject(id, subjectData, userId);
-      setSubjects(prev => prev.map(s => 
-        s._id === id ? ensureSubjectProperties(updatedSubject) : s
-      ));
+  
       addNotification('Subject updated successfully!', 'success');
       return updatedSubject;
     } catch (error) {
@@ -1891,33 +1889,30 @@ const [availableTags, setAvailableTags] = useState([]);
   };
 
   const analytics = getAnalytics();
- const updateSubject = async (updater) => {
+const updateSubject = async (updater) => {
   if (!activeSubject) return;
   try {
-    console.log("Active Subject before update:", activeSubject);
+    const previousScrollY = window.scrollY;
+    const currentActiveId = activeSubjectId; // Sauvegarder l'ID actif
     
     const updatedSubject = ensureSubjectProperties(updater(ensureSubjectProperties(activeSubject)));
-     const previousScrollY = window.scrollY;
-     
-     
+    
     // Remove MongoDB-specific fields before sending update
     const { __v, createdAt, updatedAt, ...subjectData } = updatedSubject;
-    console.log(subjectData);
-    const IDACT=subjectData.id
-     console.log("IDACT",IDACT);
      
     await handleUpdateSubject(activeSubject._id, subjectData);
     
- // Update local subjects list without losing reference
+    // Update local subjects list without losing reference
     setSubjects(prev =>
-      prev.map(s => s.id === IDACT ? { ...s, ...subjectData } : s)
+      prev.map(s => s.id === currentActiveId ? { ...s, ...subjectData } : s)
     );
 
-    // Keep same subject selected
-    setActiveSubjectId(IDACT);
- requestAnimationFrame(() => {
-        window.scrollTo(0, previousScrollY);
-      });
+    // Maintenir la sélection du sujet actif - NE PAS appeler setActiveSubjectId
+    // car cela ne change pas vraiment la valeur
+    
+    requestAnimationFrame(() => {
+      window.scrollTo(0, previousScrollY);
+    });
 
   } catch (error) {
     console.error('Error updating subject:', error);
